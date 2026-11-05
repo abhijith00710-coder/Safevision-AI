@@ -1,0 +1,176 @@
+SAF​​EVISION AI – INDUSTRIAL PPE SAFETY POLICY Version: 2.0 Scope: Helmet,
+Safety Vest, Safety Boots
+
+1.  PURPOSE SafeVision AI is a computer-vision PPE monitoring system.
+    The current active PPE categories are Safety Helmet, Safety Vest,
+    and Safety Boots. The database is the source of truth for observed
+    worker status. This policy is the source of truth for safety rules.
+    The LLM must only explain retrieved database information using this
+    policy. It must not invent data or rules.
+
+2.  SAFETY HELMET Workers must wear the required safety helmet/head
+    protection where helmet protection is required. YES = sufficient
+    evidence that a helmet is present. NO = confirmed evidence that the
+    required helmet is missing. UNKNOWN = insufficient reliable evidence
+    to determine helmet status. UNKNOWN must never be treated as YES or
+    NO. If helmet = NO, the worker cannot be considered fully PPE
+    compliant. Relevant questions: helmet requirement, missing helmet,
+    no helmet, helmet status, helmet YES/NO/UNKNOWN.
+
+3.  SAFETY VEST Workers must wear the required safety/high-visibility
+    vest where required. YES = sufficient evidence that the vest is
+    present. NO = confirmed evidence that the vest is missing. UNKNOWN =
+    insufficient reliable evidence to determine vest status. UNKNOWN
+    must never be treated as YES or NO. If vest = NO, the worker cannot
+    be considered fully PPE compliant. Relevant questions: vest
+    requirement, missing vest, no vest, vest status, vest
+    YES/NO/UNKNOWN.
+
+4.  SAFETY BOOTS Workers must use appropriate safety footwear suitable
+    for the workplace and assigned task. YES = sufficient evidence that
+    required safety boots are present. NO = confirmed evidence that
+    required safety boots are missing. UNKNOWN = insufficient reliable
+    evidence to determine boots status. UNKNOWN must never be treated as
+    YES or NO. If boots = NO, the worker cannot be considered fully PPE
+    compliant. Relevant questions: boots requirement, missing boots, no
+    boots, footwear, boots status, boots YES/NO/UNKNOWN.
+
+5.  PPE STATUS VALUES YES means confirmed present. NO means confirmed
+    missing. UNKNOWN means insufficient evidence. UNKNOWN is not a
+    substitute for NO and is not a substitute for YES. UNKNOWN may
+    result from occlusion, poor lighting, motion blur, camera angle,
+    distance, partial visibility, crowded scenes, temporary detection
+    failure, or model limitations.
+
+6.  OVERALL PPE COMPLIANCE The current monitored categories are Helmet,
+    Vest, and Boots. COMPLIANT = Helmet YES AND Vest YES AND Boots YES.
+    NON-COMPLIANT = at least one monitored category is confirmed NO.
+    UNKNOWN = no monitored category is confirmed NO, but at least one
+    monitored category is UNKNOWN. Examples: Helmet YES, Vest YES, Boots
+    YES -> COMPLIANT. Helmet NO, Vest YES, Boots YES -> NON-COMPLIANT.
+    Helmet YES, Vest NO, Boots YES -> NON-COMPLIANT. Helmet YES, Vest
+    YES, Boots NO -> NON-COMPLIANT. Helmet YES, Vest UNKNOWN, Boots YES
+    -> UNKNOWN. UNKNOWN must not be reported as NON-COMPLIANT unless a
+    monitored category is explicitly NO.
+
+7.  COMPUTER VISION LIMITATIONS SafeVision may return UNKNOWN when a PPE
+    item is occluded, partially visible, affected by poor lighting or
+    motion blur, too small or distant, affected by camera angle,
+    confused by nearby workers, temporarily missed by the detector, or
+    otherwise not reliably observable. A missed or uncertain observation
+    does not automatically mean that PPE is missing.
+
+8.  DETECTION AND CONFIRMATION SafeVision uses repeated observations and
+    confirmation logic. A temporary missed detection does not
+    automatically mean a PPE item is missing. A confirmed NO requires
+    sufficient evidence. UNKNOWN means the system cannot reliably decide
+    YES or NO.
+
+9.  DATABASE INFORMATION The SQLite database stores Event ID, Timestamp,
+    Camera ID, Person ID, Helmet, Vest, Boots, Overall Status, and Event
+    Type. For a question about a specific person, report the person’s
+    database values. If no record exists, say that no matching database
+    record was found. For questions about current worker status, use the
+    latest available event for each worker when the database query
+    provides latest-worker information. Distinguish latest status from
+    historical events.
+
+10. NON-COMPLIANT WORKERS For “Which workers are non-compliant?”, use
+    the latest available status of each worker when possible and return
+    only workers whose latest Overall Status is NON-COMPLIANT. If there
+    are no matching workers, say: “No workers currently have a confirmed
+    NON-COMPLIANT status in the available database records.” Do not
+    conclude that all workers are compliant merely because no
+    non-compliant workers were found.
+
+11. MISSING PPE If Helmet = NO, the worker is not fully PPE compliant.
+    If Vest = NO, the worker is not fully PPE compliant. If Boots = NO,
+    the worker is not fully PPE compliant. If the value is UNKNOWN, do
+    not claim the PPE item is definitely missing.
+
+12. SAFETY RESPONSE When a required monitored PPE item is confirmed
+    missing, the worker should not be considered fully PPE compliant.
+    SafeVision is a monitoring and decision-support system. It does not
+    independently impose disciplinary action or penalties. Human safety
+    personnel should review important safety incidents and apply the
+    organization’s actual workplace procedures.
+
+13. HUMAN OVERSIGHT Computer-vision results should be interpreted with
+    appropriate human oversight, especially for UNKNOWN results or
+    important safety decisions. The system must not claim certainty when
+    visual evidence is insufficient.
+
+14. ENTRY AND EXIT Entry/exit detection is NOT currently implemented.
+    The current system cannot reliably determine who entered, who
+    exited, entry time, exit time, number of entries, or number of
+    exits. For questions such as “How many persons entered without a
+    helmet?”, do not invent an answer. State that entry/exit tracking is
+    not currently implemented.
+
+15. GLOVES AND GOGGLES Gloves and goggles are NOT currently part of the
+    active overall PPE compliance logic. The active monitored categories
+    are Helmet, Vest, and Boots. If asked for gloves or goggles
+    compliance, state that these categories are not currently part of
+    the active application logic. Do not invent their status.
+
+16. ANSWERING RULES
+
+17. Database = actual recorded observations.
+
+18. Policy = safety rules.
+
+19. Answer the user’s question directly.
+
+20. Use only policy sections relevant to the question.
+
+21. Do not return unrelated PPE sections as the main answer.
+
+22. Never invent workers, PPE states, timestamps, or policy rules.
+
+23. Never treat UNKNOWN as YES.
+
+24. Never treat UNKNOWN as NO.
+
+25. If a database query returns no records, clearly say that no matching
+    records were found.
+
+26. For a person-specific question, use that person’s database record.
+
+27. For current worker questions, prefer the latest worker status.
+
+28. For PPE requirement questions, retrieve the relevant PPE section.
+
+29. For UNKNOWN questions, retrieve PPE Status Values and Computer
+    Vision Limitations.
+
+30. For compliance questions, retrieve Overall PPE Compliance.
+
+31. For missing-PPE questions, retrieve the relevant PPE section and
+    Safety Response.
+
+32. For entry/exit questions, state that entry/exit tracking is not
+    implemented.
+
+33. For gloves/goggles questions, state that they are not currently
+    active.
+
+34. Keep answers concise unless the user asks for detail.
+
+35. QUESTION-TO-SECTION GUIDE “What are the PPE requirements?” ->
+    Sections 2, 3, 4, 6. “What happens if a worker does not wear a
+    helmet?” -> Sections 2, 11, 12. “What does UNKNOWN mean?” ->
+    Sections 5, 7, 8. “When is a worker compliant?” -> Section 6. “When
+    is a worker non-compliant?” -> Section 6. “What is Person 130’s PPE
+    status?” -> Section 9. “Which workers are non-compliant?” ->
+    Sections 9, 10, 6. “How many workers are without helmets?” ->
+    Sections 2 and 9. “What should happen if boots are missing?” ->
+    Sections 4 and 12. “Why wasn’t the helmet detected?” -> Sections 2,
+    7, 8. “How many people entered without helmets?” -> Sections 14
+    and 2. “Are gloves monitored?” -> Section 15.
+
+36. CORE PRINCIPLE DATABASE = WHAT SAFEVISION OBSERVED. POLICY = WHAT
+    THE SAFETY RULES SAY. LLM = EXPLAINS THE OBSERVATION USING THE
+    POLICY. The LLM must not replace the database or policy and must not
+    invent information.
+
+END OF SAFEVISION AI SAFETY POLICY

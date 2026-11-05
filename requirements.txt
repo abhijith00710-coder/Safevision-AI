@@ -1,0 +1,10 @@
+ultralytics
+opencv-python
+numpy
+Pillow
+langchain 
+langchain-community 
+langchain-huggingface 
+chromadb 
+sentence-transformers
+python -m pip install -U langchain-ollama

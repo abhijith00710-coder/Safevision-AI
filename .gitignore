@@ -1,0 +1,17 @@
+venv/
+.venv/
+__pycache__/
+*.pyc
+*.db
+*.sqlite
+*.sqlite3
+*.mp4
+*.avi
+*.pt
+runs/
+data/chroma_db/
+.env
+.vscode/
+data/
+__pycache__/
+*.pyc
